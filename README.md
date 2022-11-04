@@ -1,16 +1,4 @@
 <h1 align="center">react-native-user-inactivity</h1>
-<p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.2.0-blue.svg?cacheSeconds=2592000" />
-  <a href="https://github.com/jkomyno/react-native-user-inactivity#readme">
-    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
-  </a>
-  <a href="https://github.com/jkomyno/react-native-user-inactivity/graphs/commit-activity">
-    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" target="_blank" />
-  </a>
-  <a href="https://github.com/jkomyno/react-native-user-inactivity/blob/master/LICENSE">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
-  </a>
-</p>
 
 > Functional React Native component that notifies when the user stops interacting with the mobile screen for a given amount of time.
 
@@ -21,14 +9,24 @@ As of version 1.0.0, `react-native-user-inactivity` has been rebuilt as a functi
 Thanks to [`usetimeout-react-hook`](https://github.com/jkomyno/usetimeout-react-hook), `react-native-user-inactivity` supports timers different
 than the standard one (`setTimeout`). This has solved some of the most recurrent issues, such as [#12](https://github.com/jkomyno/react-native-user-inactivity/issues/12), [#16](https://github.com/jkomyno/react-native-user-inactivity/issues/16), [#17](https://github.com/jkomyno/react-native-user-inactivity/issues/17).
 
+## Why this fork?
+
+This fork adds a small API to the original.
+It allows you to programatically inform UserInactivity that it must reset the inactivity timer because user activity has occured.
+And to programatically change the duration of the inactivity timeout.
+
+The differences from the orginal are:
+- src/BackgroundTimer.ts modified;
+- And README.md modified.
+
 ## Install
 
 ```sh
-npm install react-native-user-inactivity
+npm install https://github.com/baydroid/react-native-user-inactivity.git
 ```
 If you are running a version of react < 17 you'll need to include the `--legacy-peer-deps` flag.
 ```sh
-npm install react-native-user-inactivity --legacy-peer-deps
+npm install --legacy-peer-deps https://github.com/baydroid/react-native-user-inactivity.git
 ```
 
 ## 🔑 Key features
@@ -42,8 +40,28 @@ npm install react-native-user-inactivity --legacy-peer-deps
 ## ❔ How to use
 
 This package primarily exposes a single functional component, [UserInactivity](src/index.tsx).
-The signature of the `UserInactivity` React props is the following:
+The signatures of UserInactivity's React props and API are as follows:
 
+```typescript
+/**
+ * UserInactivityAPI is the type of an object providing the API supported by UserInactivity.
+ * Such an object can be obtained via UserInactivity's optional getAPI property.
+ */
+type UserInactivityAPI = {
+  /**
+   * Calling resetTimerDueToActivity() informs UserInactivity that some user activiity has occured.
+   * This causes the inactivity timeout to be reset.
+   */
+  resetTimerDueToActivity: () => void;
+  /**
+   * Calling changeTimeForInactivity(newTimeForInactivity : number) sets how much time must pass without activity before onAction(active: boolean)'s called.
+   * The single parameter is the new inactivity timeout in milliseconds.
+   * After the timeout's been set this way UserInactivity ignores its timeForInactivity property.
+   * Note that the inactivity timer's reset after changeTimeForInactivity()'s called.
+   */
+  changeTimeForInactivity: (newTimeForInactivity : number) => void;
+}
+```
 ```typescript
 interface UserInactivityProps<T = unknown> {
   /**
@@ -94,6 +112,13 @@ interface UserInactivityProps<T = unknown> {
    * than `timeForInactivity` milliseconds.
    */
   onAction: (active: boolean) => void;
+
+  /**
+   * Optional callback which, if present, is automatically called whenever its UserInactivity component is used.
+   * The callback is passed a single parameter of type UserInactivityAPI.
+   * The properties of this object are the API methods provided by UserInactivity.
+   */
+  getAPI?: (api: UserInactivityAPI) => any;
 }
 ```
 

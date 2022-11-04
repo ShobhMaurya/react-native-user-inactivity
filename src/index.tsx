@@ -21,6 +21,24 @@ const defaultStyle: ViewStyle = {
   flex: 1,
 };
 
+
+/**
+ * UserInactivityAPI is the type of an object providing the API supported by UserInactivity.
+ * Such an object can be obtained via UserInactivity's optional getAPI property.
+ */
+export type UserInactivityAPI = {
+  /**
+   * Calling resetTimerDueToActivity() informs UserInactivity that some user activiity has occured.
+   * This causes the inactivity timeout to be reset.
+   */
+  resetTimerDueToActivity: () => void;
+  /**
+   * Calling changeTimeForInactivity(newTimeForInactivity : number) sets how much time must pass without activity before onAction(active: boolean)'s called.
+   * Also the inactivity timer's reset after changeTimeForInactivity()'s called.
+   */
+  changeTimeForInactivity: (newTimeForInactivity : number) => void;
+}
+
 export interface UserInactivityProps<T = unknown> {
   /**
    * Number of milliseconds after which the view is considered inactive.
@@ -70,7 +88,16 @@ export interface UserInactivityProps<T = unknown> {
    * than `timeForInactivity` milliseconds.
    */
   onAction: (active: boolean) => void;
+
+  /**
+   * Optional callback which, if present, is automatically called whenever its UserInactivity component is used.
+   * The callback is passed a single parameter of type UserInactivityAPI.
+   * The properties of this object are the API methods provided by UserInactivity.
+   */
+  getAPI?: (api: UserInactivityAPI) => any;
 }
+
+let callerSetTimeout : number = -1;
 
 const UserInactivity: React.FC<UserInactivityProps> = ({
   children,
@@ -80,15 +107,23 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   style,
   timeForInactivity,
   timeoutHandler,
+  getAPI,
 }) => {
   const actualStyle = style || defaultStyle;
+
+  if (getAPI) getAPI({
+    resetTimerDueToActivity: resetTimerDueToActivity,
+    changeTimeForInactivity: changeTimeForInactivity
+    });
 
   /**
    * If the user has provided a custom timeout handler, it is used directly,
    * otherwise it defaults to the default timeout handler (setTimeout/clearTimeout).
    */
   const actualTimeoutHandler = timeoutHandler || defaultTimeoutHandler;
-  const timeout = timeForInactivity || defaultTimeForInactivity;
+  //let timeout = timeForInactivity || defaultTimeForInactivity;
+  let timeout = callerSetTimeout > 0 ? callerSetTimeout : (timeForInactivity || defaultTimeForInactivity);
+  //const [ timeout, setTimeout ] = useState<number>(timeForInactivity || defaultTimeForInactivity);
 
   /**
    * If the `isActive` prop is manually changed to `true`, call `resetTimerDueToActivity`
@@ -166,6 +201,12 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
      * Causes `useTimeout` to restart.
      */
     setDate(Date.now());
+  }
+
+  function changeTimeForInactivity(newTimeForInactivity : number) : void {
+    callerSetTimeout = timeout = newTimeForInactivity;
+    //setTimeout(newTimeForInactivity);
+    resetTimerDueToActivity();
   }
 
   /**
