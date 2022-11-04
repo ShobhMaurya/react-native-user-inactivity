@@ -17,6 +17,8 @@ And to programatically change the duration of the inactivity timeout.
 
 The differences from the orginal are:
 - src/BackgroundTimer.ts modified;
+- package-lock.json removed;
+- package.json editited;
 - And README.md modified.
 
 ## Install
