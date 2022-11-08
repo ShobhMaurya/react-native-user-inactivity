@@ -31,7 +31,7 @@
   "author": "Alberto Schiabel (https://github.com/jkomyno)",
   "license": "MIT",
   "dependencies": {
-    "git+https://github.com/baydroid/usetimeout-react-hook.git": "^0.1.3"
+    "baydroid/usetimeout-react-hook.git#master": "^0.1.3"
   },
   "devDependencies": {
     "@types/react": "*",
