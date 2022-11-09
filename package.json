@@ -4,12 +4,7 @@
   "description": "React Native component that notifies if the user is active or not",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/baydroid/react-native-user-inactivity.git"
-  },
   "scripts": {
-    "test": "echo \"Error: test NYIP\" && exit 1",
     "build": "tsc"
   },
   "files": [
@@ -28,17 +23,16 @@
   "author": "Alberto Schiabel (https://github.com/jkomyno)",
   "license": "MIT",
   "dependencies": {
-    "usetimeout-react-hook": "git+https://github.com/baydroid/usetimeout-react-hook.git"
+    "usetimeout-react-hook": "github:baydroid/usetimeout-react-hook"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": ">=0.63.46"
   },
   "devDependencies": {
     "@types/react": "*",
     "@types/react-native": ">=0.63.46",
     "@types/react-native-background-timer": "^2.0.0",
-    "typescript": ">=3.5.3"
-  },
-  "peerDependencies": {
-    "react": "*",
-    "react-native": ">=0.63.46",
-    "react-native-background-timer": "^2.4.1"
+    "typescript": "*"
   }
 }
