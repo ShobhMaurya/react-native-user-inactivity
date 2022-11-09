@@ -16,9 +16,10 @@ It allows you to programatically inform UserInactivity that it must reset the in
 And to programatically change the duration of the inactivity timeout.
 
 The differences from the orginal are:
-- src/BackgroundTimer.ts modified;
+- src/BackgroundTimer.ts modified (API added);
 - package-lock.json removed;
 - package.json editited;
+- tsconfig.json editited;
 - And README.md modified.
 
 ## Install
