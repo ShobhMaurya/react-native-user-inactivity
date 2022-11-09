@@ -33,7 +33,7 @@
   "devDependencies": {
     "@types/react": "*",
     "@types/react-native": ">=0.63.46",
-    "@types/react-native-background-timer": "^2.4.1",
+    "@types/react-native-background-timer": "^2.0.0",
     "typescript": ">=3.5.3"
   },
   "peerDependencies": {
