@@ -27,7 +27,7 @@
   "author": "Shobh (https://github.com/ShobhMaurya)",
   "license": "MIT",
   "dependencies": {
-    "usetimeout-react-hook": "github:ShobhMaurya/usetimeout-react-hook"
+    "usetimeout-react-hook": "github:baydroid/usetimeout-react-hook"
   },
   "peerDependencies": {
     "react": "*",
